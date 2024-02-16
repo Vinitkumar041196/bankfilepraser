@@ -1,12 +1,10 @@
 package main
 
 import (
-	"bank_file_analyser/accounts/service"
+	"bank_file_analyser/app/cmd"
 	"bank_file_analyser/config"
-	"bank_file_analyser/fileparser"
-	"fmt"
+	"bank_file_analyser/domain"
 	"log"
-	"os"
 )
 
 func main() {
@@ -18,22 +16,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//initialize file parser
-	parser := fileparser.NewCSVParser(rune(conf.FileColumnSeparator[0]), conf.FileHasHeader)
-
-	//initialize accounts service
-	accSrvc := service.NewBalanceGeneratorService(parser, conf.PayRefRegex, conf.DecimalPrecision)
-
-	file, err := os.Open(conf.FilePath)
-	if err != nil {
-		log.Fatal(err)
+	var app domain.App
+	if conf.AppMode == "CMD" {
+		app = cmd.NewCMDApp(conf)
 	}
-	defer file.Close()
-
-	data, err := accSrvc.GenerateAccBalancesFromFile(file)
-	if err != nil {
-		log.Fatal(err)
+	if app == nil{
+		log.Fatal("Couldn't start app. Check config.")
 	}
-
-	fmt.Println(accSrvc.FormatAccountBalances(data))
+	app.Run()
 }
