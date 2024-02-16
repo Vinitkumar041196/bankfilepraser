@@ -28,7 +28,7 @@
 
 ## Generate/View Swagger for HTTP mode:
 
-   - Install the swag binary using the below command: **Required for generating Swagger**
+   - Install the swag binary using the below command: **Required for generating Swagger files**
         ```
         go install github.com/swaggo/swag/cmd/swag@latest
         ``` 
