@@ -7,9 +7,13 @@ import (
 	_ "bank_file_analyser/docs"
 	"bank_file_analyser/domain"
 	"bank_file_analyser/fileparser"
+	"context"
 	"crypto/tls"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -32,25 +36,6 @@ func NewHttpApp(conf *config.AppConfig) domain.App {
 	return &httpApp{Config: conf, AccBalanceService: accSrvc}
 }
 
-func (app *httpApp) Run() {
-	router := app.NewRouter()
-
-	server := &http.Server{
-		Addr:    app.Config.ServerAddress,
-		Handler: router,
-	}
-
-	log.Printf("Server started at: %s", server.Addr)
-
-	if app.Config.EnableTLS {
-		log.Fatal(server.ListenAndServeTLS(app.Config.SSLCertPath, app.Config.SSLKeyPath))
-	} else {
-		//Globally disabling SSL certificate check
-		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-		log.Fatal(server.ListenAndServe())
-	}
-}
-
 func (app *httpApp) NewRouter() *gin.Engine {
 	router := gin.Default()
 	// setup cors
@@ -70,4 +55,35 @@ func (app *httpApp) NewRouter() *gin.Engine {
 	v1.POST("/process_statement", httpHandler.ProcessStatement)
 
 	return router
+}
+
+func (app *httpApp) Run() {
+	router := app.NewRouter()
+
+	server := &http.Server{
+		Addr:    app.Config.ServerAddress,
+		Handler: router,
+	}
+
+	c := make(chan os.Signal, 1)
+	defer close(c)
+
+	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-c
+		server.Shutdown(context.Background())
+	}()
+
+
+	log.Printf("Server started at: %s", server.Addr)
+
+	if app.Config.EnableTLS {
+		server.ListenAndServeTLS(app.Config.SSLCertPath, app.Config.SSLKeyPath)
+	} else {
+		//Globally disabling SSL certificate check
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		server.ListenAndServe()
+	}
+
+	log.Printf("Server stopped")
 }
