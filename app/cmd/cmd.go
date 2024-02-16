@@ -19,7 +19,7 @@ type cmdApp struct {
 
 func NewCMDApp(conf *config.AppConfig) domain.App {
 	//initialize file parser
-	parser := fileparser.NewCSVParser(rune(conf.FileColumnSeparator[0]), conf.FileHasHeader)
+	parser := fileparser.NewCSVParser(rune(conf.FileColumnSeparator[0]), conf.FileHasHeader, conf.DecimalPrecision)
 
 	//initialize accounts service
 	accSrvc := service.NewBalanceGeneratorService(parser, conf.PayRefRegex, conf.DecimalPrecision)
@@ -39,7 +39,7 @@ func (app *cmdApp) Run() {
 	}()
 
 	fmt.Println("\nStarting Statement Processor.\nPress Q or ctrl+c to exit.")
-	
+
 	more := "Y"
 	for {
 		//get file path

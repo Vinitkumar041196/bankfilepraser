@@ -11,30 +11,35 @@ import (
 )
 
 type CSVParser struct {
-	separator rune
-	hasHeader bool
+	separator        rune
+	hasHeader        bool
+	decimalPrecision int
 }
 
-func NewCSVParser(separator rune, hasHeader bool) domain.FileParser {
+func NewCSVParser(separator rune, hasHeader bool, decimalPrecision int) domain.FileParser {
 	if separator == 0 {
 		separator = ','
 	}
+	if decimalPrecision == 0 {
+		decimalPrecision = domain.DECIMAL_PRECISION
+	}
 	return &CSVParser{
-		separator: separator,
-		hasHeader: hasHeader,
+		separator:        separator,
+		hasHeader:        hasHeader,
+		decimalPrecision: decimalPrecision,
 	}
 }
 
 // buf can be file, byte buffer, etc
-func (tp *CSVParser) Parse(buf io.Reader) ([]domain.BankStatementRecord, error) {
-	if tp.separator == 0 {
+func (parser *CSVParser) Parse(buf io.Reader) ([]domain.BankStatementRecord, error) {
+	if parser.separator == 0 {
 		return nil, fmt.Errorf("couldn't get column separator")
 	}
 
 	r := csv.NewReader(buf)
-	r.Comma = tp.separator
+	r.Comma = parser.separator
 
-	if tp.hasHeader { //skip header
+	if parser.hasHeader { //skip header
 		r.Read()
 	}
 
@@ -60,12 +65,12 @@ func (tp *CSVParser) Parse(buf io.Reader) ([]domain.BankStatementRecord, error) 
 			Type:       line[6],
 			Currency:   strings.ToUpper(strings.TrimSpace(line[9])),
 		}
-		row.Credit, err = utils.FormatAmtStrToInt64(line[7], domain.DECIMAL_PRECISION)
+		row.Credit, err = utils.FormatAmtStrToInt64(line[7], parser.decimalPrecision)
 		if err != nil {
 			log.Println("Error while parsing numbers", err)
 			return nil, err
 		}
-		row.Debit, err = utils.FormatAmtStrToInt64(line[8], domain.DECIMAL_PRECISION)
+		row.Debit, err = utils.FormatAmtStrToInt64(line[8], parser.decimalPrecision)
 		if err != nil {
 			log.Println("Error while parsing numbers", err)
 			return nil, err

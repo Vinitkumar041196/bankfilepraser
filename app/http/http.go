@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/gin-contrib/cors"
@@ -28,7 +29,7 @@ type httpApp struct {
 
 func NewHttpApp(conf *config.AppConfig) domain.App {
 	//initialize file parser
-	parser := fileparser.NewCSVParser(rune(conf.FileColumnSeparator[0]), conf.FileHasHeader)
+	parser := fileparser.NewCSVParser(rune(conf.FileColumnSeparator[0]), conf.FileHasHeader, conf.DecimalPrecision)
 
 	//initialize accounts service
 	accSrvc := service.NewBalanceGeneratorService(parser, conf.PayRefRegex, conf.DecimalPrecision)
@@ -60,6 +61,11 @@ func (app *httpApp) NewRouter() *gin.Engine {
 func (app *httpApp) Run() {
 	router := app.NewRouter()
 
+	app.Config.ServerAddress = strings.TrimSpace(app.Config.ServerAddress)
+	if app.Config.ServerAddress == "" {
+		app.Config.ServerAddress = ":8080"
+	}
+
 	server := &http.Server{
 		Addr:    app.Config.ServerAddress,
 		Handler: router,
@@ -73,7 +79,6 @@ func (app *httpApp) Run() {
 		<-c
 		server.Shutdown(context.Background())
 	}()
-
 
 	log.Printf("Server started at: %s", server.Addr)
 

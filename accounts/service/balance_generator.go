@@ -17,7 +17,7 @@ func NewBalanceGeneratorService(parser domain.FileParser, payRefRegex string, de
 	if payRefRegex == "" {
 		payRefRegex = domain.PAYMENT_REFERENCE_REGEX
 	}
-	if decPrecision == -1 {
+	if decPrecision == 0 {
 		decPrecision = domain.DECIMAL_PRECISION
 	}
 	return &balanceGeneratorService{fileParser: parser, paymentRefRegex: payRefRegex, decimalPrecision: decPrecision}
