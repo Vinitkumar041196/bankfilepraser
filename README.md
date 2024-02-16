@@ -38,6 +38,6 @@
         swag init
         ```
    - The above command should generate a docs folder if it doesnt already exists.
-   - 3 files, namely *docs.go, swagger.json* and *swagger.yaml* will be created in the docs folder.
+   - Three files, namely *docs.go, swagger.json* and *swagger.yaml* will be created in the *docs* folder.
    - After every update to swagger related comments in code it is required to run *swag init* command to update the documentation.
    - Swagger document will be available on **http://{SERVER_ADDR}/docs/index.html**
