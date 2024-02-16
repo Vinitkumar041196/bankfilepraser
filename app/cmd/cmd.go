@@ -6,8 +6,10 @@ import (
 	"bank_file_analyser/domain"
 	"bank_file_analyser/fileparser"
 	"fmt"
-	"log"
 	"os"
+	"os/signal"
+	"strings"
+	"syscall"
 )
 
 type cmdApp struct {
@@ -26,20 +28,56 @@ func NewCMDApp(conf *config.AppConfig) domain.App {
 }
 
 func (app *cmdApp) Run() {
-	file, err := os.Open(app.Config.FilePath)
-	if err != nil {
-		log.Fatal("Error while reading file: ", err)
-	}
-	defer file.Close()
+	c := make(chan os.Signal, 1)
+	defer close(c)
 
-	accBalances, err := app.AccBalanceService.GenerateAccBalancesFromFile(file)
-	if err != nil {
-		log.Fatal("Error while generating account balances: ", err)
-	}
+	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-c
+		fmt.Println("Stopping.")
+		os.Exit(1)
+	}()
 
-	resAccBalances := app.AccBalanceService.FormatAccountBalances(accBalances)
-	fmt.Println("Totals")
-	for curr, balance := range resAccBalances.Balances {
-		fmt.Printf("%s %s\n", curr, balance.Total)
+	fmt.Println("\nStarting Statement Processor.\nPress ctrl+c to exit.")
+	for {
+		//get file path
+		fmt.Println("\nEnter file path:")
+		filePath := ""
+		fmt.Scanln(&filePath)
+
+		filePath = strings.TrimSpace(filePath)
+		if filePath == "" {
+			continue
+		}
+
+		file, err := os.Open(filePath)
+		if err != nil {
+			fmt.Println("Error while reading file: ", err)
+			continue
+		}
+
+		accBalances, err := app.AccBalanceService.GenerateAccBalancesFromFile(file)
+		if err != nil {
+			fmt.Println("Error while generating account balances: ", err)
+			continue
+		}
+
+		file.Close()
+
+		resAccBalances := app.AccBalanceService.FormatAccountBalances(accBalances)
+
+		fmt.Println("\nResult:\nCurrency | Totals")
+		for curr, balance := range resAccBalances.Balances {
+			fmt.Printf("%8s | %s\n", curr, balance.Total)
+		}
+
+		fmt.Println("\nDo you have more files to process? Y/N: ")
+
+		more := "N"
+		fmt.Scanln(&more)
+		if strings.ToUpper(more) == "N" {
+			fmt.Println("Stopping")
+			break
+		}
 	}
 }

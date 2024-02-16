@@ -9,7 +9,6 @@ import (
 type AppConfig struct {
 	AppMode             string `mapstructure:"APP_MODE"`
 	PayRefRegex         string `mapstructure:"PAYMENT_REFERENCE_REGEX"`
-	FilePath            string `mapstructure:"FILE_PATH"`
 	FileColumnSeparator string `mapstructure:"FILE_COLUMN_SEPARATOR"`
 	FileHasHeader       bool   `mapstructure:"FILE_HAS_HEADER"`
 	DecimalPrecision    int    `mapstructure:"DECIMAL_PRECISION"`
