@@ -38,7 +38,9 @@ func (app *cmdApp) Run() {
 		os.Exit(1)
 	}()
 
-	fmt.Println("\nStarting Statement Processor.\nPress ctrl+c to exit.")
+	fmt.Println("\nStarting Statement Processor.\nPress Q or ctrl+c to exit.")
+	
+	more := "Y"
 	for {
 		//get file path
 		fmt.Println("\nEnter file path:")
@@ -48,6 +50,10 @@ func (app *cmdApp) Run() {
 		filePath = strings.TrimSpace(filePath)
 		if filePath == "" {
 			continue
+		}
+
+		if strings.ToUpper(filePath) == "Q" {
+			break
 		}
 
 		file, err := os.Open(filePath)
@@ -73,11 +79,10 @@ func (app *cmdApp) Run() {
 
 		fmt.Println("\nDo you have more files to process? Y/N: ")
 
-		more := "N"
 		fmt.Scanln(&more)
-		if strings.ToUpper(more) == "N" {
-			fmt.Println("Stopping")
+		if more = strings.ToUpper(more); more == "N" || more == "Q" {
 			break
 		}
 	}
+	fmt.Println("Stopping")
 }
