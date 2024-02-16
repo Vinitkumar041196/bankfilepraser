@@ -60,12 +60,12 @@ func (tp *CSVParser) Parse(buf io.Reader) ([]domain.BankStatementRecord, error) 
 			Type:       line[6],
 			Currency:   strings.ToUpper(strings.TrimSpace(line[9])),
 		}
-		row.Credit, err = utils.FormatAmtToInt64(line[7])
+		row.Credit, err = utils.FormatAmtStrToInt64(line[7], domain.DECIMAL_PRECISION)
 		if err != nil {
 			log.Println("Error while parsing numbers", err)
 			return nil, err
 		}
-		row.Debit, err = utils.FormatAmtToInt64(line[8])
+		row.Debit, err = utils.FormatAmtStrToInt64(line[8], domain.DECIMAL_PRECISION)
 		if err != nil {
 			log.Println("Error while parsing numbers", err)
 			return nil, err
