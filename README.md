@@ -22,8 +22,8 @@
         ```
         go run main.go
         ```
-   - If *APP_MODE* configured as **CMD**, you will get a command line instructions to use the service.
-   - If *APP_MODE* configured as **HTTP**, http server will be started on host and port specified by *SERVER_ADDR* variable. You can use any http client to use the API. The API definition is available on swagger endpoint *http://{SERVER_ADDR}/docs/index.html*
+   - If **APP_MODE** configured as *CMD*, you should see command line instructions to use the service.
+   - If **APP_MODE** configured as *HTTP*, http server will be started on host and port specified by *SERVER_ADDR* variable. You can use any http client to use the API. The API definition is available on swagger endpoint **http://{SERVER_ADDR}/docs/index.html**
 
 
 ## Generate/View Swagger for HTTP mode:
@@ -39,4 +39,4 @@
    - The above command should generate a docs folder if it doesnt already exists.
    - 3 files, namely docs.go, swagger.json and swagger.yaml will be created in the docs folder.
    - After every update to swagger related comments in code it is required to run swag init to update the documentation.
-   - Swagger document will be available on *http://{SERVER_ADDR}/docs/index.html*
+   - Swagger document will be available on **http://{SERVER_ADDR}/docs/index.html**
