@@ -1,0 +1,59 @@
+basePath: /v1
+definitions:
+  controllers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  controllers.SuccessResponse:
+    properties:
+      message:
+        type: string
+      result:
+        $ref: '#/definitions/domain.FormattedBankAccBalances'
+    type: object
+  domain.FormattedAccBalances:
+    properties:
+      total:
+        type: string
+    type: object
+  domain.FormattedBankAccBalances:
+    properties:
+      balances:
+        additionalProperties:
+          $ref: '#/definitions/domain.FormattedAccBalances'
+        type: object
+    type: object
+info:
+  contact: {}
+  title: Statement Processor
+  version: "1.0"
+paths:
+  /process_statement:
+    post:
+      description: Use to upload master files to generate account balances
+      parameters:
+      - description: file to process
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Use to upload statement file for processing
+      tags:
+      - Accounts
+swagger: "2.0"

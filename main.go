@@ -2,10 +2,15 @@ package main
 
 import (
 	"bank_file_analyser/app/cmd"
+	"bank_file_analyser/app/http"
 	"bank_file_analyser/config"
 	"bank_file_analyser/domain"
 	"log"
 )
+
+// @title Statement Processor
+// @version 1.0
+// @BasePath /v1
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.Ldate)
@@ -17,11 +22,14 @@ func main() {
 	}
 
 	var app domain.App
-	if conf.AppMode == "CMD" {
+	switch conf.AppMode {
+	case "CMD":
 		app = cmd.NewCMDApp(conf)
-	}
-	if app == nil{
+	case "HTTP":
+		app = http.NewHttpApp(conf)
+	default:
 		log.Fatal("Couldn't start app. Check config.")
 	}
+
 	app.Run()
 }
