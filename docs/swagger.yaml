@@ -5,7 +5,7 @@ definitions:
       error:
         type: string
     type: object
-  controllers.SuccessResponse:
+  controllers.ProcessFileSuccessResponse:
     properties:
       message:
         type: string
@@ -38,13 +38,25 @@ paths:
         name: file
         required: true
         type: file
+      - description: filter date format:DD/MM/YYYY
+        in: formData
+        name: date
+        type: string
+      - description: column separator used in file
+        in: formData
+        name: column_separator
+        type: string
+      - description: decimal precision for amounts
+        in: formData
+        name: decimal_precision
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.SuccessResponse'
+            $ref: '#/definitions/controllers.ProcessFileSuccessResponse'
         "400":
           description: Bad Request
           schema:

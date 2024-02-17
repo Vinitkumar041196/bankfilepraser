@@ -32,13 +32,31 @@ const docTemplate = `{
                         "name": "file",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter date format:DD/MM/YYYY",
+                        "name": "date",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "column separator used in file",
+                        "name": "column_separator",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "decimal precision for amounts",
+                        "name": "decimal_precision",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.SuccessResponse"
+                            "$ref": "#/definitions/controllers.ProcessFileSuccessResponse"
                         }
                     },
                     "400": {
@@ -66,7 +84,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.SuccessResponse": {
+        "controllers.ProcessFileSuccessResponse": {
             "type": "object",
             "properties": {
                 "message": {

@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-//Used to avoid precision issues with float arithmetic
+// Used to avoid precision issues with float arithmetic
 func FormatAmtStrToInt64(str string, precison int) (int64, error) {
 	str = strings.TrimSpace(str)
 	if str == "" {

@@ -1,22 +1,19 @@
 package domain
 
-import "io"
-
-//default values
-const (
-	PAYMENT_REFERENCE_REGEX = "PAY[0-9]{6}[a-zA-Z]{2}"
-	DECIMAL_PRECISION     = 2
+import (
+	"io"
+	"time"
 )
 
 // BalanceGeneratorService
 type BalanceGeneratorService interface {
-	GenerateAccBalancesFromFile(file io.Reader) (*BankAccBalances, error)
+	GenerateAccBalancesFromFile(parser FileParser, file io.Reader, filterDateStr string) (*BankAccBalances, error)
 	FormatAccountBalances(accBalances *BankAccBalances) *FormattedBankAccBalances
 }
 
 // csv file data struct
 type BankStatementRecord struct {
-	Date       string
+	Date       time.Time
 	Narrative1 string
 	Narrative2 string
 	Narrative3 string
