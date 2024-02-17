@@ -1,0 +1,5 @@
+.git
+data/*
+
+# docker run -it --env-file .\.env --name statement -p 9001:9001 statement_processor
+# docker run -it --env-file .\.env --volume D:\GoLangShortVideos\fileparser\bankfilepraser\data:/app/data --name statement statement_processor --file_path data/statement.csv --out_file_path data/out.csv

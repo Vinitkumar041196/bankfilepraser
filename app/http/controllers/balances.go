@@ -17,8 +17,8 @@ type BalancesHandler struct {
 }
 
 // initializes new Http handler for balances API
-func NewBalancesHandler(srvc domain.BalanceGeneratorService) *BalancesHandler {
-	return &BalancesHandler{AccBalanceService: srvc}
+func NewBalancesHandler(srvc domain.BalanceGeneratorService,conf *config.AppConfig) *BalancesHandler {
+	return &BalancesHandler{AccBalanceService: srvc,Config: conf}
 }
 
 // ProcessFile API request struct

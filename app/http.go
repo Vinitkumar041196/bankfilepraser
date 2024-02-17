@@ -2,6 +2,7 @@ package app
 
 import (
 	"bank_file_analyser/app/http/controllers"
+	"bank_file_analyser/config"
 	_ "bank_file_analyser/docs"
 	"bank_file_analyser/domain"
 	"context"
@@ -19,7 +20,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func NewRouter(accBalanceService domain.BalanceGeneratorService) *gin.Engine {
+func NewRouter(accBalanceService domain.BalanceGeneratorService, conf *config.AppConfig) *gin.Engine {
 	//new router
 	router := gin.Default()
 
@@ -41,7 +42,7 @@ func NewRouter(accBalanceService domain.BalanceGeneratorService) *gin.Engine {
 	//v1 endpoints
 	v1 := router.Group("/v1")
 	{
-		balancesHandler := controllers.NewBalancesHandler(accBalanceService)
+		balancesHandler := controllers.NewBalancesHandler(accBalanceService, conf)
 		v1.POST("/process_statement", balancesHandler.ProcessStatement)
 	}
 
@@ -50,7 +51,7 @@ func NewRouter(accBalanceService domain.BalanceGeneratorService) *gin.Engine {
 
 func RunHTTPApp(app *App) error {
 	//create new router
-	router := NewRouter(app.AccBalanceService)
+	router := NewRouter(app.AccBalanceService, app.Config)
 
 	//set server address
 	app.Config.ServerAddress = strings.TrimSpace(app.Config.ServerAddress)
@@ -79,8 +80,8 @@ func RunHTTPApp(app *App) error {
 
 	//Globally disabling SSL certificate check
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	
-	//start http server 
+
+	//start http server
 	server.ListenAndServe()
 
 	//prints this log on exit
