@@ -57,7 +57,7 @@ This service parses the bank statement file to deduce the total value of payment
      ```
      docker build -t statement_processor .
      ```
-   - The usage remains same as mentioned above. Below mentioned are some sample commands,
+   - The usage remains same as mentioned above. Below mentioned are some sample commands
      
      **APP_MODE** = *HTTP*
      ```
