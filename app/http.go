@@ -1,7 +1,7 @@
 package app
 
 import (
-	"bank_file_analyser/app/http/controllers"
+	"bank_file_analyser/accounts/controllers"
 	"bank_file_analyser/config"
 	_ "bank_file_analyser/docs"
 	"bank_file_analyser/domain"
@@ -42,8 +42,8 @@ func NewRouter(accBalanceService domain.BalanceGeneratorService, conf *config.Ap
 	//v1 endpoints
 	v1 := router.Group("/v1")
 	{
-		balancesHandler := controllers.NewBalancesHandler(accBalanceService, conf)
-		v1.POST("/process_statement", balancesHandler.ProcessStatement)
+		accountsHandler := controllers.NewAccountsHandler(accBalanceService, conf)
+		v1.POST("/process_statement", accountsHandler.ProcessStatement)
 	}
 
 	return router

@@ -11,14 +11,14 @@ import (
 )
 
 // Http handler for balances API
-type BalancesHandler struct {
+type AccountsHandler struct {
 	AccBalanceService domain.BalanceGeneratorService
 	Config            *config.AppConfig
 }
 
 // initializes new Http handler for balances API
-func NewBalancesHandler(srvc domain.BalanceGeneratorService,conf *config.AppConfig) *BalancesHandler {
-	return &BalancesHandler{AccBalanceService: srvc,Config: conf}
+func NewAccountsHandler(srvc domain.BalanceGeneratorService, conf *config.AppConfig) *AccountsHandler {
+	return &AccountsHandler{AccBalanceService: srvc, Config: conf}
 }
 
 // ProcessFile API request struct
@@ -53,7 +53,7 @@ type ProcessFileSuccessResponse struct {
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
 // @Router /process_statement [post]
-func (h *BalancesHandler) ProcessStatement(c *gin.Context) {
+func (h *AccountsHandler) ProcessStatement(c *gin.Context) {
 	req := ProcessFileRequest{}
 
 	//parse request
