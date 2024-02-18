@@ -19,9 +19,11 @@ This service parses the bank statement file to deduce the total value of payment
    - Build the executable using below command. 
         ```
         go env -w GOOS=linux
-        go build main.go
+        go build -o ./bin/main main.go
         ```
      You should get main or main.exe file based on value of GOOS go env variable
+
+     Already built linux and windows executables can be found in **bin** folder
    - Run the executable using below command.
      - If **APP_MODE** configured as *CMD*, following command line flags are available to use the service.  
           | Flag Name     | Description                                                       |
