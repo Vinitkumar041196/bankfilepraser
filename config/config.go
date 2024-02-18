@@ -11,6 +11,7 @@ type AppConfig struct {
 	AppMode             string       `mapstructure:"APP_MODE"`
 	PayRefRegex         string       `mapstructure:"PAYMENT_REFERENCE_REGEX"`
 	FileColumnSeparator string       `mapstructure:"FILE_COLUMN_SEPARATOR"`
+	FileDateFormat      string       `mapstructure:"FILE_COLUMN_SEPARATOR"`
 	DecimalPrecision    int          `mapstructure:"DECIMAL_PRECISION"`
 	ServerAddress       string       `mapstructure:"SERVER_ADDR"`
 }
@@ -27,6 +28,7 @@ func LoadConfig() (*AppConfig, error) {
 	appConfig.FileColumnSeparator = conf.GetString("FILE_COLUMN_SEPARATOR")
 	appConfig.DecimalPrecision = conf.GetInt("DECIMAL_PRECISION")
 	appConfig.ServerAddress = conf.GetString("SERVER_ADDR")
+	appConfig.FileDateFormat = conf.GetString("FILE_DATE_FORMAT")
 
 	if appConfig.AppMode == "" { //if env variables not set check for .env file
 		conf.SetConfigFile(".env")

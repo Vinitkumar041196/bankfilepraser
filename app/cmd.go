@@ -11,7 +11,7 @@ import (
 // CMD version of app
 func RunCMDApp(app *App) error {
 	//initialize file parser
-	parser := fileparser.NewCSVParser(rune(app.Config.FileColumnSeparator[0]), app.Config.DecimalPrecision)
+	parser := fileparser.NewCSVParser(rune(app.Config.FileColumnSeparator[0]), app.Config.DecimalPrecision, app.Config.FileDateFormat)
 
 	filePath := flag.String("file_path", "", "path to statement file")
 	filterDate := flag.String("date", "", "filter date format: DD/MM/YYYY")

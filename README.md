@@ -1,19 +1,20 @@
-# BANK STATEMENT PARSER:
+# BANK STATEMENT PARSER
 This service parses the bank statement file to deduce the total value of payments made on a given date for each currency. All lines of the bank statement that represent a payment will contain a payment reference in one of it's narratives (refer to sample file *data/statement.csv*).
 
-## Usage:
+## Usage
 
 1. Create/Update .env file: 
    - The service expects a *.env* file to be present in the root level directory of the project if required configuration is not set as environment variables. 
    - Following are the environment variables that help to configure the behaviour of the service.
 
-    | Variable Name           | Usage                                              | Mode     | Default Value          | Sample Value           |
-    | ----------------------- | -------------------------------------------------- | -------- | ---------------------- | ---------------------- |
-    | APP_MODE                | service can be set up in two mode: CMD or HTTP     | CMD/HTTP |                        | CMD                    |
-    | FILE_COLUMN_SEPARATOR   | character used to separate columns in file         | CMD/HTTP | ,                      | ,                      |
-    | PAYMENT_REFERENCE_REGEX | regular expression to check the payment reference  | CMD/HTTP | PAY[0-9]{6}[a-zA-Z]{2} | PAY[0-9]{6}[a-zA-Z]{2} |
-    | DECIMAL_PRECISION       | decimal precision for credit/debit amounts in file | CMD/HTTP | 2                      | 3                      |
-    | SERVER_ADDR             | http server address {HOST:PORT}                    | HTTP     | localhost:8080         | :9001                  |
+    | Variable Name           | Usage                                               | Mode | Default Value          | Sample Value           |
+    | ----------------------- | --------------------------------------------------- | ---- | ---------------------- | ---------------------- |
+    | APP_MODE                | service can be set up in two mode: CMD or HTTP      | BOTH | CMD                    | CMD                    |
+    | FILE_COLUMN_SEPARATOR   | character used to separate columns in file          | BOTH | ,                      | ,                      |
+    | FILE_DATE_FORMAT        | format (golang date format) for date column in file | BOTH | 02/01/2006             | 2006-01-02             |
+    | PAYMENT_REFERENCE_REGEX | regular expression to check the payment reference   | BOTH | PAY[0-9]{6}[a-zA-Z]{2} | PAY[0-9]{6}[a-zA-Z]{2} |
+    | DECIMAL_PRECISION       | decimal precision for credit/debit amounts in file  | BOTH | 2                      | 3                      |
+    | SERVER_ADDR             | http server address {HOST:PORT}                     | HTTP | localhost:8080         | :9001                  |
  
 2. Start the service: 
    - Build the executable using below command. 

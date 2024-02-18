@@ -14,18 +14,24 @@ import (
 type CSVParser struct {
 	separator        rune
 	decimalPrecision int
+	dateFormat       string
 }
 
-func NewCSVParser(separator rune, decimalPrecision int) domain.FileParser {
+func NewCSVParser(separator rune, decimalPrecision int, dateFormat string) domain.FileParser {
+	//setting default values if not available
 	if separator == 0 {
 		separator = ','
 	}
 	if decimalPrecision == 0 {
 		decimalPrecision = domain.DECIMAL_PRECISION
 	}
+	if dateFormat == "" {
+		dateFormat = domain.FILE_DATE_FORMAT
+	}
 	return &CSVParser{
 		separator:        separator,
 		decimalPrecision: decimalPrecision,
+		dateFormat:       dateFormat,
 	}
 }
 
@@ -63,7 +69,7 @@ func (parser *CSVParser) Parse(buf io.Reader) ([]domain.BankStatementRecord, err
 			Currency:   strings.ToUpper(strings.TrimSpace(line[9])),
 		}
 
-		row.Date, err = time.Parse("02/01/2006", line[0])
+		row.Date, err = time.Parse(parser.dateFormat, line[0])
 		if err != nil {
 			return nil, fmt.Errorf("error parsing date in row %d: %w", i, err)
 		}

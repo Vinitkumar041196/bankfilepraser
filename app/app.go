@@ -25,6 +25,11 @@ func NewApp(conf *config.AppConfig) *App {
 
 // start app
 func (app *App) Start() {
+	//setting default app mode to CMD if not set
+	if app.Config.AppMode == "" {
+		app.Config.AppMode = "CMD"
+	}
+
 	log.Println("Starting APP. Mode =", app.Config.AppMode)
 	var err error
 	//check App Mode

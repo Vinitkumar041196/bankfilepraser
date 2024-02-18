@@ -23,10 +23,8 @@ func NewAccountsHandler(srvc domain.BalanceGeneratorService, conf *config.AppCon
 
 // ProcessFile API request struct
 type ProcessFileRequest struct {
-	File             *multipart.FileHeader `form:"file" binding:"required"`
-	Date             string                `form:"date"`
-	ColumnSeparator  string                `form:"column_separator"`
-	DecimalPrecision *int                  `form:"decimal_precision"`
+	File *multipart.FileHeader `form:"file" binding:"required"`
+	Date string                `form:"date"`
 }
 
 // Error response struct
@@ -47,8 +45,6 @@ type ProcessFileSuccessResponse struct {
 // @Produce json
 // @Param file formData file true "file to process"
 // @Param date formData string false "filter date format:DD/MM/YYYY"
-// @Param column_separator formData string false "column separator used in file"
-// @Param decimal_precision formData integer false "decimal precision for amounts"
 // @Success 200 {object} ProcessFileSuccessResponse
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
@@ -69,18 +65,8 @@ func (h *AccountsHandler) ProcessStatement(c *gin.Context) {
 		return
 	}
 
-	//set default value for column separator
-	if req.ColumnSeparator == "" {
-		req.ColumnSeparator = h.Config.FileColumnSeparator
-	}
-
-	//set default value for decimal precision
-	if req.DecimalPrecision == nil {
-		req.DecimalPrecision = &h.Config.DecimalPrecision
-	}
-
 	//initialize file parser
-	parser := fileparser.NewCSVParser(rune(req.ColumnSeparator[0]), *req.DecimalPrecision)
+	parser := fileparser.NewCSVParser(rune(h.Config.FileColumnSeparator[0]), h.Config.DecimalPrecision, h.Config.FileDateFormat)
 
 	//open uploaded file
 	file, err := req.File.Open()
