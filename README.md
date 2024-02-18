@@ -1,5 +1,5 @@
 # BANK STATEMENT PARSER
-This service parses the bank statement file to deduce the total value of payments made on a given date for each currency. All lines of the bank statement that represent a payment will contain a payment reference in one of it's narratives (refer to sample file *data/statement.csv*).
+This service parses the bank statement file to deduce the total value of payments made on a given date for each currency. All lines of the bank statement that represent a payment should contain a payment reference in one of it's narratives (refer to sample file *data/statement.csv*). Refer below section for usage and other details.
 
 ## Usage
 
@@ -60,6 +60,7 @@ This service parses the bank statement file to deduce the total value of payment
      ```
      docker build -t statement_processor .
      ```
+     You can find the docker image with latest code at [vinitondocker/statement_processor](https://hub.docker.com/repository/docker/vinitondocker/statement_processor/general)
    - The usage remains same as mentioned above. Below mentioned are some sample commands
      
      **APP_MODE** = *HTTP*
