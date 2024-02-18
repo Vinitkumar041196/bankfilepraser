@@ -76,7 +76,7 @@ This service parses the bank statement file to deduce the total value of payment
 
 ## Generate/View Swagger for HTTP mode:
 
-   - Install the swag binary using the below command: **Required for generating Swagger files**
+   - Install the swag binary using the below command: **required for generating Swagger files**
         ```
         go install github.com/swaggo/swag/cmd/swag@latest
         ``` 
